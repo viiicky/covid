@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, perf_counter
 import requests
 from datetime import datetime, date
 from tabulate import tabulate
@@ -53,6 +53,7 @@ def send_notifications(message):
 
 if __name__ == "__main__":
     while True:
+        start = perf_counter()
         h = get_hospitals(os.environ.get('DISTRICT_ID'), date.today().strftime('%d-%m-%Y'))
         for hospital in h:
             hospital.pop('center_id')
@@ -69,6 +70,6 @@ if __name__ == "__main__":
         if trimmed_output:
             # print(trimmed_output)
             send_notifications(trimmed_output)
+        print(f'time taken: {perf_counter() - start} seconds')
 
         sleep(3)
-        break
