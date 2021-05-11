@@ -10,28 +10,29 @@ load_dotenv()
 
 BASE_URL = 'https://cdn-api.co-vin.in'
 
-telegram_client = TelegramClient(os.environ.get('TELEGRAM_SESSION_NAME'), os.environ.get('TELEGRAM_API_ID'), os.environ.get('TELEGRAM_API_HASH'))
+telegram_client = TelegramClient(os.environ.get('TELEGRAM_SESSION_NAME'), os.environ.get('TELEGRAM_API_ID'),
+                                 os.environ.get('TELEGRAM_API_HASH'))
+with telegram_client:
+    to_entity = telegram_client.get_entity(os.environ.get('TELEGRAM_HOME_GROUP_INVITE_LINK'))
 
 
 def send_telegram(body, to):
     with telegram_client:
-        entity = telegram_client.get_entity(to)
-        telegram_client.send_message(entity=entity, message=body)
+        telegram_client.send_message(entity=to, message=body)
+
+
+def send_notifications(message):
+    send_telegram(message, to_entity)
 
 
 def get_calendar(district, search_date):
-    headers = {
-        'Accept-Language': 'en_US',
-        'Accept': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/90.0.4430.85 Safari/537.36 '
-    }
+    response = requests.get(
+        f'{BASE_URL}/api/v2/appointment/sessions/public/calendarByDistrict?district_id={district}&date={search_date}',
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/90.0.4430.85 Safari/537.36'})
 
-    query_url = f'{BASE_URL}/api/v2/appointment/sessions/public/calendarByDistrict?district_id={district}&date={search_date}'
-
-    response = requests.get(query_url, headers=headers)
     response.raise_for_status()
-
     return response.json()
 
 
@@ -40,15 +41,14 @@ def get_hospitals(district, search_date):
     centers = get_calendar(district, search_date)['centers']
     for center in centers:
         for session in center['sessions']:
-            if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() and session['min_age_limit'] == 18 and session['available_capacity'] > 0 and session['vaccine'] == 'COVAXIN':
+            if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() \
+                    and session['min_age_limit'] == 18 \
+                    and session['available_capacity'] > 0 \
+                    and session['vaccine'] == 'COVAXIN':
                 hospitals.append(center)
                 break
 
     return hospitals
-
-
-def send_notifications(message):
-    send_telegram(message, os.environ.get('TELEGRAM_HOME_GROUP_INVITE_LINK'))
 
 
 if __name__ == "__main__":
@@ -65,7 +65,8 @@ if __name__ == "__main__":
                 sess.pop('min_age_limit')
 
         output = tabulate(h, headers='keys', showindex='always')
-        trimmed_output = tabulate([{'name': x['name'], 'address': x['address'], 'available_capacity':[y['available_capacity'] for y in x['sessions']]} for x in h])
+        trimmed_output = tabulate([{'name': x['name'], 'address': x['address'],
+                                    'available_capacity': [y['available_capacity'] for y in x['sessions']]} for x in h])
         print(output)
         if trimmed_output:
             # print(trimmed_output)
