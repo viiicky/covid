@@ -7,13 +7,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BASE_URL = 'https://cdn-api.co-vin.in'
-
 
 def send_telegram(message):
-    send_text_url = f"https://api.telegram.org/bot{os.environ.get('TELEGRAM_BOT_TOKEN')}/sendMessage" \
-                    f"?chat_id={os.environ.get('TELEGRAM_BOT_CHAT_ID')}&parse_mode=HTML&text=<pre>{message}</pre>"
-    requests.get(send_text_url)
+    url = f"https://api.telegram.org/bot{os.environ.get('TELEGRAM_BOT_TOKEN')}/sendMessage" \
+          f"?chat_id={os.environ.get('TELEGRAM_CHAT_ID')}&parse_mode=HTML&text=<pre>{message}</pre>"
+    requests.post(url)
 
 
 def send_notifications(message):
@@ -21,11 +19,15 @@ def send_notifications(message):
 
 
 def get_calendar(district, search_date):
-    response = requests.get(
-        f'{BASE_URL}/api/v2/appointment/sessions/public/calendarByDistrict?district_id={district}&date={search_date}',
-        headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/90.0.4430.93 Safari/537.36'})
+    response = requests.get(f'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict'
+                            f'?district_id={district}&date={search_date}', headers={'User-Agent': 'Mozilla/5.0 ('
+                                                                                                  'Macintosh; Intel '
+                                                                                                  'Mac OS X 10_15_7) '
+                                                                                                  'AppleWebKit/537.36 '
+                                                                                                  '(KHTML, '
+                                                                                                  'like Gecko) '
+                                                                                                  'Chrome/90.0.4430'
+                                                                                                  '.93 Safari/537.36'})
 
     response.raise_for_status()
     return response.json()
