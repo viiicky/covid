@@ -2,7 +2,6 @@ from time import sleep, perf_counter
 import requests
 from datetime import datetime, date
 from tabulate import tabulate
-from telethon.sync import TelegramClient
 import os
 from dotenv import load_dotenv
 
@@ -10,19 +9,15 @@ load_dotenv()
 
 BASE_URL = 'https://cdn-api.co-vin.in'
 
-telegram_client = TelegramClient(os.environ.get('TELEGRAM_SESSION_NAME'), os.environ.get('TELEGRAM_API_ID'),
-                                 os.environ.get('TELEGRAM_API_HASH'))
-with telegram_client:
-    to_entity = telegram_client.get_entity(os.environ.get('TELEGRAM_HOME_GROUP_INVITE_LINK'))
 
-
-def send_telegram(body, to):
-    with telegram_client:
-        telegram_client.send_message(entity=to, message=f'<pre>{body}</pre>', parse_mode='HTML')
+def send_telegram(message):
+    send_text_url = f"https://api.telegram.org/bot'{os.environ.get('TELEGRAM_BOT_TOKEN')}/sendMessage" \
+                    f"?chat_id='{os.environ.get('TELEGRAM_BOT_CHAT_ID')}&parse_mode=HTML&text=<pre>{message}</pre>"
+    requests.get(send_text_url)
 
 
 def send_notifications(message):
-    send_telegram(message, to_entity)
+    send_telegram(message)
 
 
 def get_calendar(district, search_date):
