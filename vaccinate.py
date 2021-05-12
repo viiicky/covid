@@ -48,25 +48,30 @@ def get_hospitals(district, search_date):
 
 
 if __name__ == "__main__":
-    while True:
-        start = perf_counter()
-        h = get_hospitals(os.environ.get('DISTRICT_ID'), date.today().strftime('%d-%m-%Y'))
-        for hospital in h:
-            hospital.pop('center_id')
-            hospital.pop('state_name')
-            hospital.pop('district_name')
+    try:
+        while True:
+            start = perf_counter()
+            h = get_hospitals(os.environ.get('DISTRICT_ID'), date.today().strftime('%d-%m-%Y'))
+            for hospital in h:
+                hospital.pop('center_id')
+                hospital.pop('state_name')
+                hospital.pop('district_name')
 
-            for sess in hospital['sessions']:
-                sess.pop('session_id')
-                sess.pop('min_age_limit')
+                for sess in hospital['sessions']:
+                    sess.pop('session_id')
+                    sess.pop('min_age_limit')
 
-        output = tabulate(h, headers='keys', showindex='always')
-        trimmed_output = tabulate([{'name': x['name'], 'address': x['address'],
-                                    'available_capacity': [y['available_capacity'] for y in x['sessions']]} for x in h])
-        print(f"filtered centers:\n{output}")
-        if trimmed_output:
-            # print(f"filtered centers:\n{trimmed_output}")
-            send_notifications(trimmed_output)
-        print(f'time taken: {perf_counter() - start} seconds')
+            output = tabulate(h, headers='keys', showindex='always')
+            trimmed_output = tabulate([{'name': x['name'], 'address': x['address'],
+                                        'available_capacity': [y['available_capacity'] for y in x['sessions']]} for x in
+                                       h])
+            print(f"filtered centers:\n{output}")
+            if trimmed_output:
+                # print(f"filtered centers:\n{trimmed_output}")
+                send_notifications(trimmed_output)
+            print(f'time taken: {perf_counter() - start} seconds')
 
-        sleep(3)
+            sleep(int(os.environ.get('SLEEP_SECONDS')))
+    except Exception as e:
+        print(e)
+        send_notifications(e)
