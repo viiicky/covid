@@ -39,6 +39,7 @@ def get_calendar(district, search_date):
 def get_hospitals(district, search_date):
     hospitals = []
     centers = get_calendar(district, search_date)['centers']
+    print(f"all centers:\n{tabulate(centers, headers='keys', showindex='always')}")
     for center in centers:
         for session in center['sessions']:
             if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() \
@@ -67,9 +68,9 @@ if __name__ == "__main__":
         output = tabulate(h, headers='keys', showindex='always')
         trimmed_output = tabulate([{'name': x['name'], 'address': x['address'],
                                     'available_capacity': [y['available_capacity'] for y in x['sessions']]} for x in h])
-        print(output)
+        print(f"filtered centers:\n{output}")
         if trimmed_output:
-            # print(trimmed_output)
+            # print(f"filtered centers:\n{trimmed_output}")
             send_notifications(trimmed_output)
         print(f'time taken: {perf_counter() - start} seconds')
 
