@@ -11,8 +11,8 @@ BASE_URL = 'https://cdn-api.co-vin.in'
 
 
 def send_telegram(message):
-    send_text_url = f"https://api.telegram.org/bot'{os.environ.get('TELEGRAM_BOT_TOKEN')}/sendMessage" \
-                    f"?chat_id='{os.environ.get('TELEGRAM_BOT_CHAT_ID')}&parse_mode=HTML&text=<pre>{message}</pre>"
+    send_text_url = f"https://api.telegram.org/bot{os.environ.get('TELEGRAM_BOT_TOKEN')}/sendMessage" \
+                    f"?chat_id={os.environ.get('TELEGRAM_BOT_CHAT_ID')}&parse_mode=HTML&text=<pre>{message}</pre>"
     requests.get(send_text_url)
 
 
