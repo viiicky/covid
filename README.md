@@ -1,5 +1,5 @@
 # covid
-This script notifies users via Telegram channels about availability of Covid vaccine slots.
+None of the countless services I subscribed to managed to send me an alert in "real-time". Honestly, didn't receive even one alert from any of these services - forget real-time. This led me to write it on my own. This script notifies users via Telegram channels about availability of Covid vaccine slots **in** real-time.
 
 ## Supported notifications
 | Location | Minimum age limit | Vaccine name | Telegram channel |
