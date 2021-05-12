@@ -18,7 +18,7 @@ with telegram_client:
 
 def send_telegram(body, to):
     with telegram_client:
-        telegram_client.send_message(entity=to, message=body)
+        telegram_client.send_message(entity=to, message=f'<pre>{body}</pre>', parse_mode='HTML')
 
 
 def send_notifications(message):
