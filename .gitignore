@@ -139,5 +139,4 @@ dmypy.json
 cython_debug/
 
 .idea/
-*.session
 covid-env/
