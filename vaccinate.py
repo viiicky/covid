@@ -28,7 +28,6 @@ def get_calendar(district, search_date):
                                                                                                   'like Gecko) '
                                                                                                   'Chrome/90.0.4430'
                                                                                                   '.93 Safari/537.36'})
-
     response.raise_for_status()
     return response.json()
 
@@ -36,7 +35,6 @@ def get_calendar(district, search_date):
 def get_hospitals(district, search_date):
     hospitals = []
     centers = get_calendar(district, search_date)['centers']
-    print(f"all centers:\n{tabulate(centers, headers='keys', showindex='always')}")
     for center in centers:
         for session in center['sessions']:
             if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() \
