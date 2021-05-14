@@ -31,19 +31,19 @@ def send_telegram(chat_id, message):
 
 def send_notifications(cova_18_message, cova_45_message, covi_18_message, covi_45_message):
     if cova_18_message:
-        print(f'Covaxin age 18 centers:\n{cova_18_message}')
+        # print(f'Covaxin age 18 centers:\n{cova_18_message}')
         send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_18'], cova_18_message)
 
     if cova_45_message:
-        print(f'Covaxin age 45 centers:\n{cova_45_message}')
+        # print(f'Covaxin age 45 centers:\n{cova_45_message}')
         send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_45'], cova_45_message)
 
     if covi_18_message:
-        print(f'Covishield age 18 centers:\n{covi_18_message}')
+        # print(f'Covishield age 18 centers:\n{covi_18_message}')
         send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_18'], covi_18_message)
 
     if covi_45_message:
-        print(f'Covishield age 45 centers:\n{covi_45_message}')
+        # print(f'Covishield age 45 centers:\n{covi_45_message}')
         send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_45'], covi_45_message)
 
 
