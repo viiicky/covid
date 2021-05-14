@@ -1,5 +1,8 @@
+import asyncio
 from math import ceil
 from time import sleep, perf_counter
+
+import aiohttp as aiohttp
 import requests
 from datetime import datetime, date
 from tabulate import tabulate
@@ -23,28 +26,22 @@ class Center:
         return hash(self.center_id)
 
 
-def send_telegram(chat_id, message):
-    url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}&parse_mode" \
-          f"=HTML&text=<pre>{message}</pre>"
-    requests.post(url)
+async def send_telegram(chat_id, message, session):
+    if message:
+        url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}" \
+              f"&parse_mode=HTML&text=<pre>{message}</pre>"
+        async with session.post(url):
+            pass
 
 
-def send_notifications(cova_18_message, cova_45_message, covi_18_message, covi_45_message):
-    if cova_18_message:
-        # print(f'Covaxin age 18 centers:\n{cova_18_message}')
-        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_18'], cova_18_message)
-
-    if cova_45_message:
-        # print(f'Covaxin age 45 centers:\n{cova_45_message}')
-        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_45'], cova_45_message)
-
-    if covi_18_message:
-        # print(f'Covishield age 18 centers:\n{covi_18_message}')
-        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_18'], covi_18_message)
-
-    if covi_45_message:
-        # print(f'Covishield age 45 centers:\n{covi_45_message}')
-        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_45'], covi_45_message)
+async def send_notifications(cova_18_message, cova_45_message, covi_18_message, covi_45_message):
+    async with aiohttp.ClientSession() as session:
+        await asyncio.gather(
+            send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_18'], cova_18_message, session),
+            send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_45'], cova_45_message, session),
+            send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_18'], covi_18_message, session),
+            send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_45'], covi_45_message, session)
+        )
 
 
 def get_calendar(district, search_date):
@@ -90,6 +87,7 @@ def get_hospitals(district, search_date):
 if __name__ == "__main__":
     while True:
         start = perf_counter()
+        # find centers
         cova_18, cova_45, covi_18, covi_45 = get_hospitals(os.environ['DISTRICT_ID'], date.today().strftime('%d-%m-%Y'))
 
 
@@ -97,12 +95,13 @@ if __name__ == "__main__":
             return {'name': hospital.name, 'address': hospital.address,
                     'available_capacity': [ceil(s['available_capacity']) for s in hospital.sessions]}
 
-
+        # prepare output
         cova_18_output = tabulate([format_hospital(h) for h in cova_18])
         cova_45_output = tabulate([format_hospital(h) for h in cova_45])
         covi_18_output = tabulate([format_hospital(h) for h in covi_18])
         covi_45_output = tabulate([format_hospital(h) for h in covi_45])
 
-        send_notifications(cova_18_output, cova_45_output, covi_18_output, covi_45_output)
+        # send notifications
+        asyncio.run(send_notifications(cova_18_output, cova_45_output, covi_18_output, covi_45_output))
         print(f'time taken: {perf_counter() - start} seconds')
         sleep(int(os.environ['SLEEP_SECONDS']))
