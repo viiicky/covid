@@ -1,3 +1,4 @@
+from math import ceil
 from time import sleep, perf_counter
 import requests
 from datetime import datetime, date
@@ -8,14 +9,42 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def send_telegram(message):
-    url = f"https://api.telegram.org/bot{os.environ.get('TELEGRAM_BOT_TOKEN')}/sendMessage" \
-          f"?chat_id={os.environ.get('TELEGRAM_CHAT_ID')}&parse_mode=HTML&text=<pre>{message}</pre>"
+class Center:
+    def __init__(self, center_id, name, address, sessions):
+        self.center_id = center_id
+        self.name = name
+        self.address = address
+        self.sessions = sessions
+
+    def __eq__(self, o: 'Center') -> bool:
+        return self.center_id == o.center_id
+
+    def __hash__(self) -> int:
+        return hash(self.center_id)
+
+
+def send_telegram(chat_id, message):
+    url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}&parse_mode" \
+          f"=HTML&text=<pre>{message}</pre>"
     requests.post(url)
 
 
-def send_notifications(message):
-    send_telegram(message)
+def send_notifications(cova_18_message, cova_45_message, covi_18_message, covi_45_message):
+    if cova_18_message:
+        print(f'Covaxin age 18 centers:\n{cova_18_message}')
+        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_18'], cova_18_message)
+
+    if cova_45_message:
+        print(f'Covaxin age 45 centers:\n{cova_45_message}')
+        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVA_45'], cova_45_message)
+
+    if covi_18_message:
+        print(f'Covishield age 18 centers:\n{covi_18_message}')
+        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_18'], covi_18_message)
+
+    if covi_45_message:
+        print(f'Covishield age 45 centers:\n{covi_45_message}')
+        send_telegram(os.environ['TELEGRAM_CHAT_ID_COVI_45'], covi_45_message)
 
 
 def get_calendar(district, search_date):
@@ -33,45 +62,47 @@ def get_calendar(district, search_date):
 
 
 def get_hospitals(district, search_date):
-    hospitals = []
+    covaxin_18_hospitals = set()
+    covaxin_45_hospitals = set()
+    covishield_18_hospitals = set()
+    covishield_45_hospitals = set()
+
     centers = get_calendar(district, search_date)['centers']
     for center in centers:
         for session in center['sessions']:
-            if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() \
-                    and session['min_age_limit'] == 18 \
-                    and session['available_capacity'] > 0 \
-                    and session['vaccine'] == 'COVAXIN':
-                hospitals.append(center)
-                break
+            if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() and session['available_capacity']:
+                vaccine = session['vaccine'].strip().upper()
+                center = Center(center['center_id'], center['name'], center['address'], center['sessions'])
+                if vaccine == 'COVAXIN':
+                    if session['min_age_limit'] == 18:
+                        covaxin_18_hospitals.add(center)
+                    elif session['min_age_limit'] == 45:
+                        covaxin_45_hospitals.add(center)
+                elif vaccine == 'COVISHIELD':
+                    if session['min_age_limit'] == 18:
+                        covishield_18_hospitals.add(center)
+                    elif session['min_age_limit'] == 45:
+                        covishield_45_hospitals.add(center)
 
-    return hospitals
+    return covaxin_18_hospitals, covaxin_45_hospitals, covishield_18_hospitals, covishield_45_hospitals
 
 
 if __name__ == "__main__":
-    try:
-        while True:
-            start = perf_counter()
-            h = get_hospitals(os.environ.get('DISTRICT_ID'), date.today().strftime('%d-%m-%Y'))
-            for hospital in h:
-                hospital.pop('center_id')
-                hospital.pop('state_name')
-                hospital.pop('district_name')
+    while True:
+        start = perf_counter()
+        cova_18, cova_45, covi_18, covi_45 = get_hospitals(os.environ['DISTRICT_ID'], date.today().strftime('%d-%m-%Y'))
 
-                for sess in hospital['sessions']:
-                    sess.pop('session_id')
-                    sess.pop('min_age_limit')
 
-            output = tabulate(h, headers='keys', showindex='always')
-            trimmed_output = tabulate([{'name': x['name'], 'address': x['address'],
-                                        'available_capacity': [y['available_capacity'] for y in x['sessions']]} for x in
-                                       h])
-            print(f"filtered centers:\n{output}")
-            if trimmed_output:
-                # print(f"filtered centers:\n{trimmed_output}")
-                send_notifications(trimmed_output)
-            print(f'time taken: {perf_counter() - start} seconds')
+        def format_hospital(hospital):
+            return {'name': hospital.name, 'address': hospital.address,
+                    'available_capacity': [ceil(s['available_capacity']) for s in hospital.sessions]}
 
-            sleep(int(os.environ.get('SLEEP_SECONDS')))
-    except Exception as e:
-        print(e)
-        send_notifications(e)
+
+        cova_18_output = tabulate([format_hospital(h) for h in cova_18])
+        cova_45_output = tabulate([format_hospital(h) for h in cova_45])
+        covi_18_output = tabulate([format_hospital(h) for h in covi_18])
+        covi_45_output = tabulate([format_hospital(h) for h in covi_45])
+
+        send_notifications(cova_18_output, cova_45_output, covi_18_output, covi_45_output)
+        print(f'time taken: {perf_counter() - start} seconds')
+        sleep(int(os.environ['SLEEP_SECONDS']))
