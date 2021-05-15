@@ -9,10 +9,9 @@ Use Telegram to search and join channel(s) of your interest from the table below
 | Gwalior | Covaxin | 45 | @gwl_covaxin_45 | 🟢 |
 | Gwalior | Covishield | 18 | @gwl_covishield_18 | 🟢 |
 | Gwalior | Covishield | 45 | @gwl_covishield_45 | 🟢 |
-| Bangalore Urban | Covaxin | 18 | @blr_urban_covaxin_18 | 🟢 |
-| Bangalore Urban | Covaxin | 45 | @blr_urban_covaxin_45 | 🟢 |
-| Bangalore Urban | Covishield | 18 | @blr_urban_covishield_18 | 🟢 |
 | Bangalore Urban | Covishield | 45 | @blr_urban_covishield_45 | 🟢 |
+| Bangalore Rural | Covaxin | 45 | @blr_rural_covaxin_45 | 🟢 |
+| Bangalore Rural | Covishield | 45 | @blr_rural_covishield_45 | 🟢 |
 
 ## Remarks
 - If you wish to receive alerts for a different district, feel free to raise an issue, and I will add support for it.
