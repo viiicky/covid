@@ -31,7 +31,7 @@ I, as an individual, have exhausted the number of channels that I can create on 
   | AWB_COVISHIELD_18 | awb_covishield_18 | Description: Channel for Covishield vaccination slot alerts for Aurangabad for people with minimum age of 18 years |
   | AWB_COVISHIELD_45 | awb_covishield_45 | Channel for Covishield vaccination slot alerts for Aurangabad for people with minimum age of 45 years |
   
-  District prefix can be anything - just keep it same for all the different variants of a district.
+  District prefix can be anything(I chose `AWB` in this example) - just keep it same for all the different variants of a district.
   
 2. While creating the channel(s), or post that, add `@feleena_bot` to the channel(s). Telegram would notify you to make this bot as admin, as bots can only be added as admins in Telegram channels. Add it. It is this bot that's gonna post real time alert messages to the channel.
 3. Update README: Submit a pull request that updates the table in above `Supported notifications` section, and adds your name(if not already) in the below `Contributors` section.
