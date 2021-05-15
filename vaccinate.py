@@ -30,9 +30,8 @@ async def send_telegram(chat_id, message, session):
         # print(f'channel: {chat_id}; centers:\n{message}')
         url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}" \
               f"&parse_mode=HTML&text=<pre>{message}</pre>"
-        async with session.post(url):
-            # print(f'channel: {chat_id}; resp.status: {resp.status}; resp.text(): {await resp.text()}')
-            pass
+        async with session.post(url) as resp:
+            print(f'channel: {chat_id}; resp.status: {resp.status}; resp.text(): {await resp.text()}')
 
 
 async def send_notifications(chat_ids, cova_18_message, cova_45_message, covi_18_message, covi_45_message, session):
