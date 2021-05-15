@@ -8,8 +8,10 @@ from datetime import datetime, date
 from tabulate import tabulate
 import os
 from dotenv import load_dotenv
+from fake_useragent import UserAgent
 
 load_dotenv()
+ua = UserAgent()
 
 
 class Center:
@@ -46,9 +48,7 @@ async def send_notifications(chat_ids, cova_18_message, cova_45_message, covi_18
 async def get_calendar(district_id, search_date, session):
     url = f'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id={district_id}' \
           f'&date={search_date}'
-    async with session.get(url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
-                                                       'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 '
-                                                       'Safari/537.36'}) as resp:
+    async with session.get(url, headers={'User-Agent': ua.random}) as resp:
         return await resp.json()
 
 
