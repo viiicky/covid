@@ -1,13 +1,10 @@
 aiohttp==3.7.4.post0
 async-timeout==3.0.1
 attrs==21.2.0
-certifi==2020.12.5
 chardet==4.0.0
-idna==2.10
+idna==3.1
 multidict==5.1.0
 python-dotenv==0.17.1
-requests==2.25.1
 tabulate==0.8.9
 typing-extensions==3.10.0.0
-urllib3==1.26.4
 yarl==1.6.3
