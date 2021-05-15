@@ -82,27 +82,32 @@ def format_hospital(hospital):
     return {'name': hospital.name, 'available_capacity': [ceil(s['available_capacity']) for s in hospital.sessions]}
 
 
-async def process_district(district):
-    async with aiohttp.ClientSession() as session:
-        # find centers
-        cova_18, cova_45, covi_18, covi_45 = await get_hospitals(district['district_id'],
-                                                                 date.today().strftime('%d-%m-%Y'), session)
+async def process_district(district, session):
+    # find centers
+    cova_18, cova_45, covi_18, covi_45 = await get_hospitals(district['district_id'], date.today().strftime('%d-%m-%Y'),
+                                                             session)
 
-        # prepare output
-        cova_18_output = tabulate([format_hospital(h) for h in cova_18])
-        cova_45_output = tabulate([format_hospital(h) for h in cova_45])
-        covi_18_output = tabulate([format_hospital(h) for h in covi_18])
-        covi_45_output = tabulate([format_hospital(h) for h in covi_45])
+    # prepare output
+    cova_18_output = tabulate([format_hospital(h) for h in cova_18])
+    cova_45_output = tabulate([format_hospital(h) for h in cova_45])
+    covi_18_output = tabulate([format_hospital(h) for h in covi_18])
+    covi_45_output = tabulate([format_hospital(h) for h in covi_45])
 
-        # send notifications
-        await send_notifications(district, cova_18_output, cova_45_output, covi_18_output, covi_45_output, session)
+    # send notifications
+    await send_notifications(district, cova_18_output, cova_45_output, covi_18_output, covi_45_output, session)
 
 
 async def main():
     districts = json.loads(os.environ['DISTRICTS'])
     while True:
         start = perf_counter()
-        await asyncio.gather(*(process_district(d) for d in districts))
+        async with aiohttp.ClientSession() as session:
+            results = await asyncio.gather(*(process_district(d, session) for d in districts), return_exceptions=True)
+            for district, result in zip(districts, results):
+                if isinstance(result, Exception):
+                    error = f"exception occurred when district {district['district_id']} was being processed: {result}"
+                    print(error)
+                    await send_telegram(os.environ['BOT_CHAT_ID'], error, session)
         print(f'time taken: {perf_counter() - start} seconds')
         sleep(int(os.environ['SLEEP_SECONDS']))
 
