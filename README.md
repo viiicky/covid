@@ -46,6 +46,6 @@ I, as an individual, have exhausted the number of channels that I can create on 
 6. Wear mask and save your family.
 
 ## Contributors
-1. [@viiicky](https://github.com/viiicky)
+1. [viiicky](https://github.com/viiicky)
 2. [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/)
 3. [iamtarun1993](https://github.com/iamtarun1993)
