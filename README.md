@@ -9,9 +9,15 @@ Use Telegram to search and join channel(s) of your interest from the table below
 | Gwalior | Covaxin | 45 | @gwl_covaxin_45 | 🟢 |
 | Gwalior | Covishield | 18 | @gwl_covishield_18 | 🟢 |
 | Gwalior | Covishield | 45 | @gwl_covishield_45 | 🟢 |
-| Bangalore Urban | Covishield | 45 | @blr_urban_covishield_45 | 🟢 |
 | Bangalore Rural | Covaxin | 45 | @blr_rural_covaxin_45 | 🟢 |
 | Bangalore Rural | Covishield | 45 | @blr_rural_covishield_45 | 🟢 |
+| Bangalore Urban | Covishield | 45 | @blr_urban_covishield_45 | 🟢 |
+| BBMP | Covaxin | 45 | @blr_bbmp_covaxin_45 | 🟢 |
+| BBMP | Covishield | 45 | @blr_bbmp_covishield_45 | 🟢 |
+| Aurangabad | Covaxin | 18 | @awb_covaxin_18 | 🟢 |
+| Aurangabad | Covaxin | 45 | @awb_covaxin_45 | 🟢 |
+| Aurangabad | Covishield | 18 | @awb_covishield_18 | 🟢 |
+| Aurangabad | Covishield | 45 | @awb_covishield_45 | 🟢 |
 
 ## Remarks
 - If you wish to receive alerts for a different district, feel free to raise an issue, and I will add support for it.
@@ -41,3 +47,5 @@ I, as an individual, have exhausted the number of channels that I can create on 
 
 ## Contributors
 1. [@viiicky](https://github.com/viiicky)
+2. [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/)
+3. [iamtarun1993](https://github.com/iamtarun1993)
