@@ -15,9 +15,10 @@ ua = UserAgent()
 
 
 class Center:
-    def __init__(self, center_id, name, sessions):
+    def __init__(self, center_id, name, pincode, sessions):
         self.center_id = center_id
         self.name = name
+        self.pincode = pincode
         self.sessions = sessions
 
     def __eq__(self, o: 'Center') -> bool:
@@ -63,7 +64,7 @@ async def get_hospitals(district_id, search_date, session):
         for session in center['sessions']:
             if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() and session['available_capacity']:
                 vaccine = session['vaccine'].strip().upper()
-                new_center = Center(center['center_id'], center['name'], center['sessions'])
+                new_center = Center(center['center_id'], center['name'], center['pincode'], center['sessions'])
                 if vaccine == 'COVAXIN':
                     if session['min_age_limit'] == 18:
                         covaxin_18_hospitals.add(new_center)
@@ -79,7 +80,8 @@ async def get_hospitals(district_id, search_date, session):
 
 
 def format_hospital(hospital):
-    return {'name': hospital.name, 'available_capacity': [ceil(s['available_capacity']) for s in hospital.sessions]}
+    return {'name': hospital.name, 'pincode': hospital.pincode,
+            'available_capacity': [ceil(s['available_capacity']) for s in hospital.sessions]}
 
 
 async def process_district(district, session):
