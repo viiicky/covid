@@ -114,5 +114,5 @@ async def main():
         sleep(int(os.environ['SLEEP_SECONDS']))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     asyncio.run(main())

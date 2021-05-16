@@ -26,9 +26,9 @@ I, as an individual, have exhausted the number of channels that I can create on 
 
   | Channel Name | Public Link | Description |
   | --- | --- | --- |
-  | AWB_COVAXIN_18 | awb_covaxin_18 | Description: Channel for Covaxin vaccination slot alerts for Aurangabad for people with minimum age of 18 years |
-  | AWB_COVAXIN_45 | awb_covaxin_45 | Description: Channel for Covaxin vaccination slot alerts for Aurangabad for people with minimum age of 45 years |
-  | AWB_COVISHIELD_18 | awb_covishield_18 | Description: Channel for Covishield vaccination slot alerts for Aurangabad for people with minimum age of 18 years |
+  | AWB_COVAXIN_18 | awb_covaxin_18 | Channel for Covaxin vaccination slot alerts for Aurangabad for people with minimum age of 18 years |
+  | AWB_COVAXIN_45 | awb_covaxin_45 | Channel for Covaxin vaccination slot alerts for Aurangabad for people with minimum age of 45 years |
+  | AWB_COVISHIELD_18 | awb_covishield_18 | Channel for Covishield vaccination slot alerts for Aurangabad for people with minimum age of 18 years |
   | AWB_COVISHIELD_45 | awb_covishield_45 | Channel for Covishield vaccination slot alerts for Aurangabad for people with minimum age of 45 years |
   
   District prefix can be anything(I chose `AWB` in this example) - just keep it same for all the different variants of a district.
