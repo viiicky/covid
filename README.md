@@ -4,20 +4,20 @@ None of the countless services I subscribed to managed to send me an alert in "r
 ## Supported notifications
 Use Telegram to search and join channel(s) of your interest from the table below:  
 
-| District | Vaccine name | Minimum age limit | Telegram channel | Telegram channel status |
-| --- | --- | :---: | --- | :---: |
-| Gwalior | Covaxin | 45 | @gwl_covaxin_45 | 🟢 |
-| Gwalior | Covishield | 18 | @gwl_covishield_18 | 🟢 |
-| Gwalior | Covishield | 45 | @gwl_covishield_45 | 🟢 |
-| Bangalore Rural | Covaxin | 45 | @blr_rural_covaxin_45 | 🟢 |
-| Bangalore Rural | Covishield | 45 | @blr_rural_covishield_45 | 🟢 |
-| Bangalore Urban | Covishield | 45 | @blr_urban_covishield_45 | 🟢 |
-| BBMP | Covaxin | 45 | @blr_bbmp_covaxin_45 | 🟢 |
-| BBMP | Covishield | 45 | @blr_bbmp_covishield_45 | 🟢 |
-| Aurangabad | Covaxin | 18 | @awb_covaxin_18 | 🟢 |
-| Aurangabad | Covaxin | 45 | @awb_covaxin_45 | 🟢 |
-| Aurangabad | Covishield | 18 | @awb_covishield_18 | 🟢 |
-| Aurangabad | Covishield | 45 | @awb_covishield_45 | 🟢 |
+| District | Vaccine name | Minimum age limit | Telegram channel | Telegram channel status | Telegram channel owner |
+| --- | --- | :---: | --- | :---: | --- |
+| Gwalior | Covaxin | 45 | @gwl_covaxin_45 | 🟢 | [viiicky](https://github.com/viiicky) |
+| Gwalior | Covishield | 18 | @gwl_covishield_18 | 🟢 | [viiicky](https://github.com/viiicky) |
+| Gwalior | Covishield | 45 | @gwl_covishield_45 | 🟢 | [viiicky](https://github.com/viiicky) |
+| Bangalore Rural | Covaxin | 45 | @blr_rural_covaxin_45 | 🟢 | [viiicky](https://github.com/viiicky) |
+| Bangalore Rural | Covishield | 45 | @blr_rural_covishield_45 | 🟢 | [viiicky](https://github.com/viiicky) |
+| Bangalore Urban | Covishield | 45 | @blr_urban_covishield_45 | 🟢 | [viiicky](https://github.com/viiicky) |
+| BBMP | Covaxin | 45 | @blr_bbmp_covaxin_45 | 🟢 | [iamtarun1993](https://github.com/iamtarun1993) |
+| BBMP | Covishield | 45 | @blr_bbmp_covishield_45 | 🟢 | [iamtarun1993](https://github.com/iamtarun1993) |
+| Aurangabad | Covaxin | 18 | @awb_covaxin_18 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
+| Aurangabad | Covaxin | 45 | @awb_covaxin_45 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
+| Aurangabad | Covishield | 18 | @awb_covishield_18 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
+| Aurangabad | Covishield | 45 | @awb_covishield_45 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
 
 ## Remarks
 - If you wish to receive alerts for a different district, feel free to raise an issue, and I will add support for it.
@@ -40,12 +40,7 @@ I, as an individual, have exhausted the number of channels that I can create on 
   District prefix can be anything(I chose `AWB` in this example) - just keep it same for all the different variants of a district.
   
 2. While creating the channel(s), or post that, add `@feleena_bot` to the channel(s). Telegram would notify you to make this bot as admin, as bots can only be added as admins in Telegram channels. Add it. It is this bot that's gonna post real time alert messages to the channel.
-3. Update README: Submit a pull request that updates the table in above `Supported notifications` section, and adds your name(if not already) in the below `Contributors` section.
+3. Update README: Submit a pull request that updates the table in above `Supported notifications` section.
 4. I will update the relevant environment variable with the new channels information, and would restart the script to enable it to consider these new channels, and would merge the pull request. If you aren't comfortable with Step#3, just finish Step#1 and Step#2, and then raise an issue here, or DM me - I would take care of Step#3 myself.
 5. Once the pull request is merged, consider notifications are enabled for these new channels. Feel free to share these newly supported channels in your circle at this point so that the help reaches maximum.
 6. Wear mask and save your family.
-
-## Contributors
-1. [viiicky](https://github.com/viiicky)
-2. [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/)
-3. [iamtarun1993](https://github.com/iamtarun1993)
