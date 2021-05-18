@@ -109,7 +109,11 @@ async def main():
                 if isinstance(result, Exception):
                     error = f"exception occurred when district {district['district_id']} was being processed: {result}"
                     print(error)
-                    await send_telegram(os.environ['BOT_CHAT_ID'], error, session)
+                    try:
+                        await send_telegram(os.environ['BOT_CHAT_ID'], error, session)
+                    except Exception as e:
+                        print(f'Sending error message to the bot itself errored out. Logging and swallowing the '
+                              f'exception\n{e}')
         print(f'time taken: {perf_counter() - start} seconds')
         sleep(int(os.environ['SLEEP_SECONDS']))
 
