@@ -18,6 +18,7 @@ Use Telegram to search and join channel(s) of your interest from the table below
 | Aurangabad | Covaxin | 45 | @awb_covaxin_45 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
 | Aurangabad | Covishield | 18 | @awb_covishield_18 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
 | Aurangabad | Covishield | 45 | @awb_covishield_45 | 🟢 | [Rohan Sethi](https://www.linkedin.com/in/rohan-sethi/) |
+| Ludhiana | Covishield | 18 | @ldh_covishield_18 | 🟢 | [Kirti Gautam](https://www.linkedin.com/in/kirti-gautam-1706232/) |
 
 ## Remarks
 - If you wish to receive alerts for a different district, feel free to raise an issue, and I will add support for it.
