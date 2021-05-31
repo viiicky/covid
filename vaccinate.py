@@ -14,20 +14,6 @@ load_dotenv()
 ua = UserAgent()
 
 
-class Center:
-    def __init__(self, center_id, name, pincode, sessions):
-        self.center_id = center_id
-        self.name = name
-        self.pincode = pincode
-        self.sessions = sessions
-
-    def __eq__(self, o: 'Center') -> bool:
-        return self.center_id == o.center_id
-
-    def __hash__(self) -> int:
-        return hash(self.center_id)
-
-
 async def send_telegram(chat_id, message, session):
     if message and chat_id:
         # print(f'channel: {chat_id}; centers:\n{message}')
@@ -54,35 +40,46 @@ async def get_calendar(district_id, search_date, session):
 
 
 async def get_hospitals(district_id, search_date, session):
-    covaxin_18_hospitals = set()
-    covaxin_45_hospitals = set()
-    covishield_18_hospitals = set()
-    covishield_45_hospitals = set()
+    covaxin_18_hospitals = dict()
+    covaxin_45_hospitals = dict()
+    covishield_18_hospitals = dict()
+    covishield_45_hospitals = dict()
 
     centers = (await get_calendar(district_id, search_date, session))['centers']
     for center in centers:
         for session in center['sessions']:
             if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() and session['available_capacity']:
+
                 vaccine = session['vaccine'].strip().upper()
-                new_center = Center(center['center_id'], center['name'], center['pincode'], center['sessions'])
+                center_id = center['center_id']
+                new_center = {'name': center['name'], 'pincode': center['pincode'], 'sessions': []}
+
                 if vaccine == 'COVAXIN':
                     if session['min_age_limit'] == 18:
-                        covaxin_18_hospitals.add(new_center)
+                        if center_id not in covaxin_18_hospitals:
+                            covaxin_18_hospitals[center_id] = new_center
+                        covaxin_18_hospitals[center_id]['sessions'].append(session)
                     elif session['min_age_limit'] == 45:
-                        covaxin_45_hospitals.add(new_center)
+                        if center_id not in covaxin_45_hospitals:
+                            covaxin_45_hospitals[center_id] = new_center
+                        covaxin_45_hospitals[center_id]['sessions'].append(session)
                 elif vaccine == 'COVISHIELD':
                     if session['min_age_limit'] == 18:
-                        covishield_18_hospitals.add(new_center)
+                        if center_id not in covishield_18_hospitals:
+                            covishield_18_hospitals[center_id] = new_center
+                        covishield_18_hospitals[center_id]['sessions'].append(session)
                     elif session['min_age_limit'] == 45:
-                        covishield_45_hospitals.add(new_center)
+                        if center_id not in covishield_45_hospitals:
+                            covishield_45_hospitals[center_id] = new_center
+                        covishield_45_hospitals[center_id]['sessions'].append(session)
 
     return covaxin_18_hospitals, covaxin_45_hospitals, covishield_18_hospitals, covishield_45_hospitals
 
 
 def format_hospital(hospital):
-    return {'name': hospital.name, 'pincode': hospital.pincode,
+    return {'name': hospital['name'], 'pincode': hospital['pincode'],
             'sessions': [f"{s['date']}: {ceil(s['available_capacity_dose1'])}%2b{ceil(s['available_capacity_dose2'])}"
-                         f"={ceil(s['available_capacity'])}" for s in hospital.sessions]}
+                         f"={ceil(s['available_capacity'])}" for s in hospital['sessions']]}
 
 
 async def process_district(district, session):
@@ -91,10 +88,10 @@ async def process_district(district, session):
                                                              session)
 
     # prepare output
-    cova_18_output = tabulate([format_hospital(h) for h in cova_18])
-    cova_45_output = tabulate([format_hospital(h) for h in cova_45])
-    covi_18_output = tabulate([format_hospital(h) for h in covi_18])
-    covi_45_output = tabulate([format_hospital(h) for h in covi_45])
+    cova_18_output = tabulate([format_hospital(h) for h in cova_18.values()])
+    cova_45_output = tabulate([format_hospital(h) for h in cova_45.values()])
+    covi_18_output = tabulate([format_hospital(h) for h in covi_18.values()])
+    covi_45_output = tabulate([format_hospital(h) for h in covi_45.values()])
 
     # send notifications
     await send_notifications(district, cova_18_output, cova_45_output, covi_18_output, covi_45_output, session)
