@@ -81,7 +81,8 @@ async def get_hospitals(district_id, search_date, session):
 
 def format_hospital(hospital):
     return {'name': hospital.name, 'pincode': hospital.pincode,
-            'available_capacity': [ceil(s['available_capacity']) for s in hospital.sessions]}
+            'sessions': [f"{s['date']}: {ceil(s['available_capacity_dose1'])}%2b{ceil(s['available_capacity_dose2'])}"
+                         f"={ceil(s['available_capacity'])}" for s in hospital.sessions]}
 
 
 async def process_district(district, session):
