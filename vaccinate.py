@@ -105,7 +105,7 @@ async def main():
             results = await asyncio.gather(*(process_district(d, session) for d in districts), return_exceptions=True)
             for district, result in zip(districts, results):
                 if isinstance(result, Exception):
-                    error = f"exception occurred when district {district['district_id']} was being processed: {result}"
+                    error = f"exception occurred when district {district['district_id']} was being processed: {repr(result)}"
                     print(error)
                     try:
                         await send_telegram(os.environ['BOT_CHAT_ID'], error, session)
