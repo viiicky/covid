@@ -17,13 +17,13 @@ TELEGRAM_MESSAGE_LIMIT = 4096 - len('<pre></pre>')
 
 async def send_telegram(chat_id, message, session):
     if message and chat_id:
-        # print(f'channel: {chat_id}; centers:\n{message}')
+        # print(f'{chat_id=}; centers:\n{message}')
         chunk_size = TELEGRAM_MESSAGE_LIMIT
         for start in range(0, len(message), chunk_size):
             url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}" \
                   f"&parse_mode=HTML&text=<pre>{message[start:start + chunk_size]}</pre>"
             async with session.post(url) as resp:
-                print(f'channel: {chat_id}; resp.status: {resp.status}; resp.text(): {await resp.text()}')
+                print(f'{chat_id=}; {resp.status=}; {await resp.text()=}')
 
 
 async def send_notifications(chat_ids, cova_18_message, cova_45_message, covi_18_message, covi_45_message, session):
@@ -40,7 +40,7 @@ async def get_calendar(district_id, search_date, session):
           f'&date={search_date}'
     async with session.get(url, headers={'User-Agent': ua.random, 'Cache-Control': 'no-cache'}) as resp:
         calendar_response = await resp.json()
-        print(f'district_id: {district_id}; resp.status: {resp.status}; resp.json(): {calendar_response}')
+        print(f'{district_id=}; {search_date=}; {resp.status=}; {calendar_response=}')
         return calendar_response
 
 
@@ -116,7 +116,7 @@ async def main():
                         await send_telegram(os.environ['BOT_CHAT_ID'], error, session)
                     except Exception as e:
                         print(f'Sending error message to the bot itself errored out. Logging and swallowing the '
-                              f'exception\n{e}')
+                              f'exception\n{repr(e)}')
         print(f'time taken: {perf_counter() - start} seconds')
         sleep(int(os.environ['SLEEP_SECONDS']))
 
