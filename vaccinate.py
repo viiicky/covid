@@ -1,5 +1,7 @@
 import asyncio
 import json
+from zoneinfo import ZoneInfo
+
 from math import ceil
 from time import sleep, perf_counter
 
@@ -53,7 +55,8 @@ async def get_hospitals(district_id, search_date, session):
     centers = (await get_calendar(district_id, search_date, session))['centers']
     for center in centers:
         for session in center['sessions']:
-            if datetime.strptime(session['date'], '%d-%m-%Y').date() >= date.today() and session['available_capacity']:
+            if datetime.strptime(session['date'], '%d-%m-%Y').date() >= datetime.now(
+                    tz=ZoneInfo('Asia/Kolkata')).date() and session['available_capacity']:
 
                 vaccine = session['vaccine'].strip().upper()
                 center_id = center['center_id']
