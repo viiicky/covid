@@ -12,15 +12,18 @@ from fake_useragent import UserAgent
 
 load_dotenv()
 ua = UserAgent()
+TELEGRAM_MESSAGE_LIMIT = 4096 - len('<pre></pre>')
 
 
 async def send_telegram(chat_id, message, session):
     if message and chat_id:
         # print(f'channel: {chat_id}; centers:\n{message}')
-        url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}" \
-              f"&parse_mode=HTML&text=<pre>{message}</pre>"
-        async with session.post(url) as resp:
-            print(f'channel: {chat_id}; resp.status: {resp.status}; resp.text(): {await resp.text()}')
+        chunk_size = TELEGRAM_MESSAGE_LIMIT
+        for start in range(0, len(message), chunk_size):
+            url = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage?chat_id={chat_id}" \
+                  f"&parse_mode=HTML&text=<pre>{message[start:start + chunk_size]}</pre>"
+            async with session.post(url) as resp:
+                print(f'channel: {chat_id}; resp.status: {resp.status}; resp.text(): {await resp.text()}')
 
 
 async def send_notifications(chat_ids, cova_18_message, cova_45_message, covi_18_message, covi_45_message, session):
