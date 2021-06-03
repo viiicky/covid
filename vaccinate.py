@@ -33,7 +33,7 @@ async def send_notifications(chat_ids, cova_18_message, cova_45_message, covi_18
 
 
 async def get_calendar(district_id, search_date, session):
-    url = f'https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={district_id}' \
+    url = f'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id={district_id}' \
           f'&date={search_date}'
     async with session.get(url, headers={'User-Agent': ua.random, 'Cache-Control': 'no-cache'}) as resp:
         calendar_response = await resp.json()
