@@ -36,7 +36,9 @@ async def get_calendar(district_id, search_date, session):
     url = f'https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={district_id}' \
           f'&date={search_date}'
     async with session.get(url, headers={'User-Agent': ua.random, 'Cache-Control': 'no-cache'}) as resp:
-        return await resp.json()
+        calendar_response = await resp.json()
+        print(f'district_id: {district_id}; resp.status: {resp.status}; resp.json(): {calendar_response}')
+        return calendar_response
 
 
 async def get_hospitals(district_id, search_date, session):
