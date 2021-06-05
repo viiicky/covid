@@ -6,6 +6,7 @@ Use Telegram to search and join channel(s) of your interest from the table below
 
 | District | Vaccine name | Minimum age limit | Telegram channel | Telegram channel status | Telegram channel owner |
 | --- | --- | :---: | --- | :---: | --- |
+| Gwalior | Covaxin | 18 | @gwl_covaxin_18 | 🟢 | [viiicky](https://github.com/viiicky) |
 | Gwalior | Covaxin | 45 | @gwl_covaxin_45 | 🟢 | [viiicky](https://github.com/viiicky) |
 | Gwalior | Covishield | 18 | @gwl_covishield_18 | 🟢 | [viiicky](https://github.com/viiicky) |
 | Gwalior | Covishield | 45 | @gwl_covishield_45 | 🟢 | [viiicky](https://github.com/viiicky) |
@@ -23,7 +24,7 @@ Use Telegram to search and join channel(s) of your interest from the table below
 ## Remarks
 - If you wish to receive alerts for a different district, feel free to raise an issue, and I will add support for it.
 
-- The script needs to pass `User-Agent` header to the co-vin api, and it seems they have put up cache also. Because of these factors, some of the alerts might not match the info that you see on the portal. We can't do much about these rare cases. So, when you see a notification in the channel, but can't find the same data on the portal, just try from different devices available to you, as because of these factors, different devices have potential to show different data. If you really want to minimise this, you can always run this code on your own and supply the relevant `User-Agent` value.
+- The script needs to pass `User-Agent` header to the co-vin api, and it seems they have put up cache also. Because of these factors, some of the alerts might not match the info that you see on the portal. We can't do much about these rare cases. So, when you see a notification in the channel, but can't find the same data on the portal, just try from different devices available to you, or try from different networks, or you can even try from incognito mode, as because of these factors, different devices/network/ingonito-mode have potential to show different data. If you really want to minimise this, you can always run this code on your own and supply the relevant `User-Agent` value.
 
 - When slots are available, channels would see a surge of alerts. Feel free to mute the channel for a given duration to avoid being disturbed if needed.
 
